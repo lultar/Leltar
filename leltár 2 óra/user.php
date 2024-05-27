@@ -47,26 +47,23 @@
     #myUL li a:hover:not(.header) {
         background-color: #eee;
     }
+
+    body {
+        background-color: lightgrey;
+    }
 </style>
 
 <body>
-    <div class="container">
+    <div class="container p-5 mt-5" style="background-color: white; border-radius: 25px;">
         <h1 class="mt-5">Leltár</h1>
         <br>
 
         <h3>Tárgy Keresése</h3>
-        <input type="text" id="itemSearch" onkeyup="myFunction()" placeholder="Tárgy neve">
+        <input type="text" id="itemSearch" placeholder="Tárgy neve">
+        <br><br>
 
         <ul id="myUL">
-            <li><a href="#">Adele</a></li>
-            <li><a href="#">Agnes</a></li>
-
-            <li><a href="#">Billy</a></li>
-            <li><a href="#">Bob</a></li>
-
-            <li><a href="#">Calvin</a></li>
-            <li><a href="#">Christina</a></li>
-            <li><a href="#">Cindy</a></li>
+            
         </ul>
         <br>
 
@@ -75,13 +72,109 @@
         <br><br>
 
         <h3>Tárgy Információ</h3>
-        <input type="text" id="warehouse" placeholder="Raktár">
-        <input type="text" id="aisles" placeholder="Sor">
+        <!--<input type="text" id="warehouse" placeholder="Raktár">-->
+            <label for="building">Select Building:</label>
+        <select id="building">
+            <option value="">Select Building</option>
+        </select>
+
+        <label for="aisle">Select Aisle:</label>
+        <select id="aisle" disabled>
+            <option value="">Select Aisle</option>
+        </select>
+        <!--<input type="text" id="aisles" placeholder="Sor">-->
         <input type="text" id="shelf" placeholder="Polc">
-        <input type="text" id="measurment" placeholder="Mennyiség">
-        <input type="text" id="measurmentType" placeholder="Mértékegység">
+        <input type="number" id="measurment" min="0" placeholder="Mennyiség">
+        <input type="text"  placeholder="Mértékegység">
+
         
     </div>
+
+    <script>
+
+    document.addEventListener('DOMContentLoaded', function () {
+            // Function to fetch and populate building options
+            function populateBuildings() {
+                var xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            document.getElementById('building').innerHTML = xhr.responseText;
+                        } else {
+                            console.error('Error fetching buildings: ' + xhr.status);
+                        }
+                    }
+                };
+                xhr.open('GET', 'get_buildings.php', true);
+                xhr.send();
+            }
+
+            search('', '', '')
+
+            // Initial population of building options
+            populateBuildings();
+
+            // Function to fetch and populate aisle options based on selected building
+            function populateAisles(building) {
+                var xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            document.getElementById('aisle').innerHTML = xhr.responseText;
+                            document.getElementById('aisle').disabled = false;
+                            // Automatically run search when aisle is selected
+                            document.getElementById('aisle').addEventListener('change', function() {
+                                var selectedBuilding = document.getElementById('building').value;
+                                var selectedAisle = this.value;
+                                search(selectedBuilding, selectedAisle, '');
+                            });
+                        } else {
+                            console.error('Error fetching aisles: ' + xhr.status);
+                        }
+                    }
+                };
+                xhr.open('GET', 'get_aisles.php?building=' + encodeURIComponent(building), true);
+                xhr.send();
+            }
+
+            // Function to perform search based on selected building and aisle
+            function search(building, aisle, searchTerm) {
+                var xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === XMLHttpRequest.DONE) {
+                        if (xhr.status === 200) {
+                            document.getElementById('myUL').innerHTML = xhr.responseText;
+                        } else {
+                            console.error('Error fetching search results: ' + xhr.status);
+                        }
+                    }
+                };
+                xhr.open('GET', 'search.php?building=' + encodeURIComponent(building) + '&aisle=' + encodeURIComponent(aisle) + '&search=' + encodeURIComponent(searchTerm), true);
+                xhr.send();
+            }
+
+            // Populate aisles when building is selected
+            document.getElementById('building').addEventListener('change', function () {
+                var selectedBuilding = this.value;
+                if (selectedBuilding) {
+                    populateAisles(selectedBuilding);
+                } else {
+                    document.getElementById('aisle').innerHTML = '<option value="">Select Aisle</option>';
+                    document.getElementById('aisle').disabled = true;
+                }
+                // Automatically run search when building is selected
+                search(selectedBuilding, '', '');
+            });
+
+            // Search as you type in the search bar
+            document.getElementById('itemSearch').addEventListener('input', function () {
+                var selectedBuilding = document.getElementById('building').value;
+                var selectedAisle = document.getElementById('aisle').value;
+                var searchTerm = this.value;
+                search(selectedBuilding, selectedAisle, searchTerm);
+            });
+        });
+</script>
 </body>
 
 <?php
@@ -90,23 +183,5 @@
 
 ?>
 
-<script>
-    function myFunction() {
-        var input, filter, ul, li, a, i, txtValue;
-        input = document.getElementById("itemSearch");
-        filter = input.value.toUpperCase();
-        ul = document.getElementById("myUL");
-        li = ul.getElementsByTagName("li");
-        for (i = 0; i < li.length; i++) {
-            a = li[i].getElementsByTagName("a")[0];
-            txtValue = a.textContent || a.innerText;
-            if (txtValue.toUpperCase().indexOf(filter) > -1) {
-                li[i].style.display = "";
-            } else {
-                li[i].style.display = "none";
-            }
-        }
-    }
-</script>
 
 </html>
