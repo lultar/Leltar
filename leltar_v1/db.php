@@ -1,7 +1,7 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "";
+$servername = "ssh.hueserver.hu";
+$username = "leltar";
+$password = "leltar123321";
 $database = "leltar_db";
 
 $connection = mysqli_connect($servername, $username, $password, $database);

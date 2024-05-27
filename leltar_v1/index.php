@@ -4,20 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>Dashboard</h1>
-    <label for="building">Select Building:</label>
-    <select id="building">
-        <option value="">Select Building</option>
-    </select>
+    <div class="container">
+        <h1>Dashboard</h1>
+        <label for="building">Select Building:</label>
+        <select id="building">
+            <option value="">Select Building</option>
+        </select>
 
-    <label for="aisle">Select Aisle:</label>
-    <select id="aisle" disabled>
-        <option value="">Select Aisle</option>
-    </select>
+        <label for="aisle">Select Aisle:</label>
+        <select id="aisle" disabled>
+            <option value="">Select Aisle</option>
+        </select>
 
-    <div id="search-results"></div>
+        <label for="search-bar">Search Items:</label>
+        <input type="text" id="search-bar" placeholder="Search by name...">
+
+        <div id="search-results"></div>
+    </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -36,6 +42,7 @@
                 xhr.open('GET', 'get_buildings.php', true);
                 xhr.send();
             }
+            search("","","");
 
             // Initial population of building options
             populateBuildings();
@@ -52,7 +59,7 @@
                             document.getElementById('aisle').addEventListener('change', function() {
                                 var selectedBuilding = document.getElementById('building').value;
                                 var selectedAisle = this.value;
-                                search(selectedBuilding, selectedAisle);
+                                search(selectedBuilding, selectedAisle, '');
                             });
                         } else {
                             console.error('Error fetching aisles: ' + xhr.status);
@@ -63,8 +70,8 @@
                 xhr.send();
             }
 
-            // Function to perform search based on selected building and aisle
-            function search(building, aisle) {
+            // Function to perform search based on selected building and aisle and optional search term
+            function search(building, aisle, searchTerm) {
                 var xhr = new XMLHttpRequest();
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState === XMLHttpRequest.DONE) {
@@ -75,7 +82,7 @@
                         }
                     }
                 };
-                xhr.open('GET', 'search.php?building=' + encodeURIComponent(building) + '&aisle=' + encodeURIComponent(aisle), true);
+                xhr.open('GET', 'search.php?building=' + encodeURIComponent(building) + '&aisle=' + encodeURIComponent(aisle) + '&search=' + encodeURIComponent(searchTerm), true);
                 xhr.send();
             }
 
@@ -89,7 +96,15 @@
                     document.getElementById('aisle').disabled = true;
                 }
                 // Automatically run search when building is selected
-                search(selectedBuilding, '');
+                search(selectedBuilding, '', '');
+            });
+
+            // Search as you type in the search bar
+            document.getElementById('search-bar').addEventListener('input', function () {
+                var selectedBuilding = document.getElementById('building').value;
+                var selectedAisle = document.getElementById('aisle').value;
+                var searchTerm = this.value;
+                search(selectedBuilding, selectedAisle, searchTerm);
             });
         });
     </script>
