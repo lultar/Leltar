@@ -1,16 +1,16 @@
 <?php
-    require "db.php";
+require "db.php";
 
-    $sql = "SELECT * FROM Users WHERE UserType = '2'";
-    $result = mysqli_query($connection, $sql);
+$sql = "SELECT * FROM Users WHERE UserType = '1'";
+$result = mysqli_query($connection, $sql);
 
-    $userData = [];
+$userData = [];
 
-    if (mysqli_num_rows($result) > 0) {
-        while ($row = mysqli_fetch_assoc($result)) {
-            $userData[] = $row;
-        }
+if (mysqli_num_rows($result) > 0) {
+    while ($row = mysqli_fetch_assoc($result)) {
+        $userData[] = $row;
     }
+}
 ?>
 
 <!DOCTYPE html>
@@ -66,6 +66,13 @@
             padding: 8px;
             text-align: left;
         }
+
+        #editForm {
+            display: none;
+            border: 1px solid #ccc;
+            padding: 16px;
+            background-color: #f9f9f9;
+        }
     </style>
 </head>
 <body>
@@ -81,6 +88,7 @@
                 <tr>
                     <th>UserID</th>
                     <th>Username</th>
+                    <th>Password</th>
                     <th>UserType</th>
                     <th>Módosítás</th>
                     <th>Törlés</th>
@@ -92,8 +100,9 @@
                     <tr>
                         <td><?php echo htmlspecialchars($user['UserID']); ?></td>
                         <td><?php echo htmlspecialchars($user['Username']); ?></td>
+                        <td><?php echo htmlspecialchars($user['Password']); ?></td>
                         <td><?php echo htmlspecialchars($user['UserType']); ?></td>
-                        <td><button onclick="Modositas(<?php echo $user['UserID']; ?>)">Módosítás</button></td>
+                        <td><button onclick="Modositas(<?php echo $user['UserID']; ?>, '<?php echo htmlspecialchars($user['Username']); ?>', '<?php echo htmlspecialchars($user['Password']); ?>', '<?php echo htmlspecialchars($user['UserType']); ?>')">Módosítás</button></td>
                         <td><button onclick="Torles(<?php echo $user['UserID']; ?>)">Törlés</button></td>
                     </tr>
                     <?php endforeach; ?>
@@ -108,6 +117,21 @@
 
     <div id="Termek" class="tabcontent">
         <h3>Termékek kezelése</h3>
+    </div>
+
+    <div id="editForm">
+        <h3>Módosítás</h3>
+        <form id="updateForm" method="POST" action="modositas.php">
+            <input type="hidden" name="user_id" id="ModositasID">
+            <label for="Modositasname">Username:</label><br>
+            <input type="text" id="Modositasname" name="username"><br>
+            <label for="editPassword">Password:</label><br>
+            <input type="text" id="editPassword" name="password"><br>
+            <label for="ModositasType">UserType:</label><br>
+            <input type="text" id="ModositasType" name="user_type"><br><br>
+            <input type="submit" value="Update">
+            <button type="button" onclick="closeEditForm()">Cancel</button>
+        </form>
     </div>
 
     <script>
@@ -144,21 +168,17 @@
             }
         }
 
-        function Modositas(userID) {
-            var form = document.createElement('form');
-            form.method = 'POST';
-            form.action = 'torles.php';
+        function Modositas(userID, username, password, userType) {
+            document.getElementById('ModositasID').value = userID;
+            document.getElementById('Modositasname').value = username;
+            document.getElementById('editPassword').value = password;
+            document.getElementById('ModositasType').value = userType;
+            document.getElementById('editForm').style.display = 'block';
+        }
 
-            var input = document.createElement('input');
-            input.type = 'hidden';
-            input.name = 'user_id';
-            input.value = userID;
-
-            form.appendChild(input);
-            document.body.appendChild(form);
-            form.submit();
+        function closeEditForm() {
+            document.getElementById('editForm').style.display = 'none';
         }
     </script>
 </body>
 </html>
-
