@@ -1,12 +1,10 @@
 <?php
+    session_start();
     require "db.php";
 
     $error_message = isset($_GET['error']) ? $_GET['error'] : '';
 
-    $sql = "SELECT Users.UserID, Users.Username, Users.Password, UserTypes.UserTypeID, UserTypes.UserTypeName 
-        FROM Users 
-        INNER JOIN UserTypes ON Users.UserType = UserTypes.UserTypeID 
-        WHERE UserTypeID = '2'";
+    $sql = "SELECT Users.UserID, Users.Username, Users.Password, UserTypes.UserTypeID, UserTypes.UserTypeName FROM Users INNER JOIN UserTypes ON Users.UserType = UserTypes.UserTypeID WHERE UserTypeID = '2' ORDER BY Users.UserID";
     $result = mysqli_query($connection, $sql);
 
     $userData = [];
@@ -16,6 +14,26 @@
             $userData[] = $row;
         }
     }
+
+    $sql2 = "SELECT Items.ItemID, Items.ItemName, Items.Description, Items.Quantity, Items.RealQuantity, MeasurementTypes.MeasurementType, Shelves.ShelfName 
+        FROM Items 
+        INNER JOIN MeasurementTypes ON Items.MeasurementTypeID = MeasurementTypes.MeasurementTypeID 
+        INNER JOIN Shelves ON Items.ShelfID = Shelves.ShelfID ORDER BY Items.ItemID";
+    $result = mysqli_query($connection, $sql2);
+
+    $productData = [];
+
+    if (mysqli_num_rows($result) > 0) {
+        while ($row = mysqli_fetch_assoc($result)) {
+            $productData[] = $row;
+        }
+    }
+
+    if (!isset($_SESSION['UserID']) || $_SESSION['UserType'] != 1) {
+        header("Location: login.html");
+        exit();
+    }
+    $username = isset($_SESSION['Username']) ? $_SESSION['Username'] : 'Admin';
 ?>
 
 <!DOCTYPE html>
@@ -31,9 +49,9 @@
         <button class="tablinks" onclick="changeTab(event, 'Felhasznalo')">Felhasználók kezelése</button>
         <button class="tablinks" onclick="changeTab(event, 'Termek')">Termékek kezelése</button>
         <div class="dropdown" style="float: right;">
-        <button class="tablinks">Admin</button>
+        <button class="tablinks"><?php echo htmlspecialchars($username); ?></button>        
         <div class="dropdown-content">
-            <a href="#">Kijelentkezés</a>
+            <a href="login.html">Kijelentkezés</a>
         </div>
     </div>
     </div>
@@ -83,8 +101,50 @@
         </table>
     </div>
 
+    <!-- Termékek kezelése tab content -->
     <div id="Termek" class="tabcontent">
-        <h3>Termékek kezelése</h3>
+        <div class="user-management-container">
+            <h3 class="user-management-title">Termékek kezelése</h3>
+            <div class="add-user-button-container">
+                <button type="button" class="add-user-button" onclick="showAddProductModal()">+</button>
+            </div>
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ItemID</th>
+                    <th>ItemName</th>
+                    <th>Description</th>
+                    <th>Quantity</th>
+                    <th>RealQuantity</th>
+                    <th>MeasurementType</th>
+                    <th>ShelfName</th>
+                    <th>Módosítás</th>
+                    <th>Törlés</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php if (!empty($productData)): ?>
+                    <?php foreach ($productData as $product): ?>
+                        <tr>
+                            <td><?php echo htmlspecialchars($product['ItemID']); ?></td>
+                            <td><?php echo htmlspecialchars($product['ItemName']); ?></td>
+                            <td><?php echo htmlspecialchars($product['Description']); ?></td>
+                            <td><?php echo htmlspecialchars($product['Quantity']); ?></td>
+                            <td><?php echo htmlspecialchars($product['RealQuantity']); ?></td>
+                            <td><?php echo htmlspecialchars($product['MeasurementType']); ?></td>
+                            <td><?php echo htmlspecialchars($product['ShelfName']); ?></td>
+                            <td><button onclick="showEditProductModal(<?php echo $product['ItemID']; ?>, '<?php echo htmlspecialchars($product['ItemName']); ?>', '<?php echo htmlspecialchars($product['Description']); ?>', <?php echo $product['Quantity']; ?>, <?php echo $product['RealQuantity']; ?>, '<?php echo htmlspecialchars($product['MeasurementType']); ?>', '<?php echo htmlspecialchars($product['ShelfName']); ?>')" class="btn btn-primary">Módosítás</button></td>
+                            <td><button onclick="deleteProduct(<?php echo $product['ItemID']; ?>)" class="btn btn-danger">Törlés</button></td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="9">No products found.</td>
+                    </tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
     </div>
 
     <!-- Modal -->
@@ -126,8 +186,8 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form id="updateForm" method="POST" action="modositas.php">
-                        <input type="hidden" name="user_id" id="ModositasID">
+                    <form id="addForm" method="POST" action="rogzit.php">
+                        <input type="hidden" name="user_id" id="RogzitID">
                         <label for="NewUsername">Username:</label><br>
                         <input type="text" class="form-control" id="NewUsername" name="username"><br>
                         <label for="NewPassword">Password:</label><br>
@@ -141,6 +201,75 @@
                     <button type="button" class="btn btn-primary" onclick="rogzit()">Hozzáadás</button>
                 </div>
                 </div>
+        </div>
+    </div>
+
+    <!-- Modal for editing products -->
+    <div class="modal fade" id="editProductModal" tabindex="-1" role="dialog" aria-labelledby="editProductModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editProductModalLabel">Módosítás</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closeModal()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="updateProductForm" method="POST" action="modositasT.php">
+                        <input type="hidden" name="item_id" id="editItemID">
+                        <label for="editItemName">ItemName:</label><br>
+                        <input type="text" class="form-control" id="editItemName" name="item_name"><br>
+                        <label for="editDescription">Description:</label><br>
+                        <input type="text" class="form-control" id="editDescription" name="description"><br>
+                        <label for="editQuantity">Quantity:</label><br>
+                        <input type="number" class="form-control" id="editQuantity" name="quantity"><br>
+                        <label for="editRealQuantity">RealQuantity:</label><br>
+                        <input type="number" class="form-control" id="editRealQuantity" name="real_quantity"><br>
+                        <label for="editMeasurementType">MeasurementType:</label><br>
+                        <input type="text" class="form-control" id="editMeasurementType" name="measurement_type"><br>
+                        <label for="editShelfName">ShelfName:</label><br>
+                        <input type="text" class="form-control" id="editShelfName" name="shelf_name"><br>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModal()">Mégse</button>
+                    <button type="button" class="btn btn-primary" onclick="updateProduct()">Mentés</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for adding products -->
+    <div class="modal fade" id="addProductModal" tabindex="-1" role="dialog" aria-labelledby="addProductModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addProductModalLabel">Hozzáadás</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closeModal()">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="addProductForm" method="POST" action="rogzitT.php">
+                        <label for="newItemName">ItemName:</label><br>
+                        <input type="text" class="form-control" id="newItemName" name="item_name"><br>
+                        <label for="newDescription">Description:</label><br>
+                        <input type="text" class="form-control" id="newDescription" name="description"><br>
+                        <label for="newQuantity">Quantity:</label><br>
+                        <input type="number" class="form-control" id="newQuantity" name="quantity"><br>
+                        <label for="newRealQuantity">RealQuantity:</label><br>
+                        <input type="number" class="form-control" id="newRealQuantity" name="real_quantity"><br>
+                        <label for="newMeasurementType">MeasurementType:</label><br>
+                        <input type="text" class="form-control" id="newMeasurementType" name="measurement_type"><br>
+                        <label for="newShelfName">ShelfName:</label><br>
+                        <input type="text" class="form-control" id="newShelfName" name="shelf_name"><br>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModal()">Mégse</button>
+                    <button type="button" class="btn btn-primary" onclick="addProduct()">Hozzáadás</button>
+                </div>
+            </div>
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -198,6 +327,8 @@
         function closeModal() {
             $('#editModal').modal('hide');
             $('#rogzitModal').modal('hide');
+            $('#editProductModal').modal('hide');
+            $('#addProductModal').modal('hide');
         }
 
         function showConfirm(message, callback) {
@@ -268,6 +399,48 @@
             var data = 'username=' + encodeURIComponent(username) + '&password=' + encodeURIComponent(password) + '&user_type=' + encodeURIComponent(userType);
 
             xhr.send(data);
+        }
+
+        function deleteProduct(itemID) {
+            showConfirm("Biztosan törölni akarod ezt a terméket?", function(result) {
+                if (result) {
+                    var form = document.createElement('form');
+                    form.method = 'POST';
+                    form.action = 'torlesT.php';
+
+                    var input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = 'item_id';
+                    input.value = itemID;
+
+                    form.appendChild(input);
+                    document.body.appendChild(form);
+                    form.submit();
+                }
+            });
+        }
+
+        function showEditProductModal(itemID, itemName, description, quantity, realQuantity, measurementType, shelfName) {
+            document.getElementById('editItemID').value = itemID;
+            document.getElementById('editItemName').value = itemName;
+            document.getElementById('editDescription').value = description;
+            document.getElementById('editQuantity').value = quantity;
+            document.getElementById('editRealQuantity').value = realQuantity;
+            document.getElementById('editMeasurementType').value = measurementType;
+            document.getElementById('editShelfName').value = shelfName;
+            $('#editProductModal').modal('show');
+        }
+
+        function updateProduct() {
+            document.getElementById('updateProductForm').submit();
+        }
+
+        function showAddProductModal() {
+            $('#addProductModal').modal('show');
+        }
+
+        function addProduct() {
+            document.getElementById('addProductForm').submit();
         }
 
     </script>
