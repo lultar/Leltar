@@ -13,7 +13,7 @@
         $stmt_check->store_result();
         
         if ($stmt_check->num_rows > 0) {
-            header("Location: admin.php?error=Nem sikerült módosítani az adatokat");
+            header("Location: admin/admin.php?error=Nem sikerült módosítani az adatokat");
             exit();
         }
 
@@ -23,10 +23,10 @@
         $stmt->bind_param("ssii", $username, $password, $userType, $userID);
 
         if ($stmt->execute()) {
-            header("Location: admin.php");
+            header("Location: admin/admin.php");
             exit();
         } else {
-            header("Location: admin.php?error=Nem sikerült módosítani az adatokat");
+            header("Location: admin/admin.php?error=Nem sikerült módosítani az adatokat");
             exit();
         }
 

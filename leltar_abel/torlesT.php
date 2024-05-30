@@ -6,7 +6,7 @@
     $sql = "DELETE FROM Items WHERE ItemID=$item_id";
 
     if (mysqli_query($connection, $sql)) {
-        header('Location: admin.php');
+        header('Location: admin/admin.php');
     } else {
         echo 'Error: ' . mysqli_error($connection);
     }

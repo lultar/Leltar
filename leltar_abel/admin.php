@@ -30,7 +30,7 @@
     }
 
     if (!isset($_SESSION['UserID']) || $_SESSION['UserType'] != 1) {
-        header("Location: login.html");
+        header("Location: login.php");
         exit();
     }
     $username = isset($_SESSION['Username']) ? $_SESSION['Username'] : 'Admin';
@@ -51,12 +51,12 @@
         <div class="dropdown" style="float: right;">
         <button class="tablinks"><?php echo htmlspecialchars($username); ?></button>        
         <div class="dropdown-content">
-            <a href="login.html">Kijelentkezés</a>
+            <a href="login.php">Kijelentkezés</a>
         </div>
     </div>
     </div>
 
-    <!-- Error message display -->
+    <!-- Error üzenet -->
     <div id="error-alert" class="alert alert-danger" role="alert" style="display: none;">
         <?php echo htmlspecialchars($error_message); ?>
         <button type="button" class="close" onclick="closeAlert()">&times;</button>
@@ -66,16 +66,23 @@
         <div class="user-management-container">
             <h3 class="user-management-title">Felhasználók kezelése</h3>
             <div class="add-user-button-container">
+                <select name="KeresSelect" id="KeresSelect">
+                    <option value="UserID">UserID</option>
+                    <option value="Username">Username</option>
+                    <option value="Password">Password</option>
+                    <option value="UserType">UserType</option>
+                </select>
+                <input type="search" placeholder="Keresés..." id="Kereses" class="searchbar" oninput="Keres()">
                 <button type="button" class="add-user-button" onclick="rogzitModal()">+</button>
             </div>
         </div>
         <table class="table">
             <thead>
                 <tr>
-                    <th>UserID</th>
-                    <th>Username</th>
-                    <th>Password</th>
-                    <th>UserType</th>
+                    <th data-column="Users.UserID" data-dir="ASC" class="ths">UserID<i class="fa fa-sort"></i></th>
+                    <th data-column="Users.Username" data-dir="ASC" class="ths">Username<i class="fa fa-sort"></i></th>
+                    <th data-column="Users.Password" data-dir="ASC" class="ths">Password<i class="fa fa-sort"></i></th>
+                    <th data-column="UserTypes.UserTypeName" data-dir="ASC" class="ths">UserType<i class="fa fa-sort"></i></th>
                     <th>Módosítás</th>
                     <th>Törlés</th>
                 </tr>
@@ -94,7 +101,7 @@
                     <?php endforeach; ?>
                 <?php else: ?>
                     <tr>
-                        <td colspan="6">No admin users found.</td>
+                        <td colspan="6">Nincs találat.</td>
                     </tr>
                 <?php endif; ?>
             </tbody>
@@ -112,13 +119,13 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>ItemID</th>
-                    <th>ItemName</th>
-                    <th>Description</th>
-                    <th>Quantity</th>
-                    <th>RealQuantity</th>
-                    <th>MeasurementType</th>
-                    <th>ShelfName</th>
+                    <th data-column="Items.ItemID" data-dir="ASC" class="ths">ItemID<i class="fa fa-sort"></i></th>
+                    <th data-column="Items.ItemName" data-dir="ASC" class="ths">ItemName<i class="fa fa-sort"></i></th>
+                    <th data-column="Items.Description" data-dir="ASC" class="ths">Description<i class="fa fa-sort"></i></th>
+                    <th data-column="Items.Quantity" data-dir="ASC" class="ths">Quantity<i class="fa fa-sort"></i></th>
+                    <th data-column="Items.RealQuantity" data-dir="ASC" class="ths">RealQuantity<i class="fa fa-sort"></i></th>
+                    <th data-column="MeasurementTypes.MeasurementType" data-dir="ASC" class="ths">MeasurementType<i class="fa fa-sort"></i></th>
+                    <th data-column="Shelves.ShelfName" data-dir="ASC" class="ths">ShelfName<i class="fa fa-sort"></i></th>
                     <th>Módosítás</th>
                     <th>Törlés</th>
                 </tr>
@@ -320,6 +327,20 @@
             $('#editModal').modal('show');
         }
 
+        function Keres() {
+            var selectValue = document.getElementById("KeresSelect").value;
+            var searchValue = document.getElementById("Kereses").value;
+
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "keres.php?field=" + selectValue + "&query=" + searchValue, true);
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    document.querySelector("tbody").innerHTML = xhr.responseText;
+                }
+            };
+            xhr.send();
+        }
+
         function updateUser() {
             document.getElementById('updateForm').submit();
         }
@@ -442,6 +463,117 @@
         function addProduct() {
             document.getElementById('addProductForm').submit();
         }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            function fetchUsers(orderColumn, orderDir) {
+                const xhr = new XMLHttpRequest();
+                xhr.open('GET', `fetch_users.php?orderColumn=${orderColumn}&orderDir=${orderDir}`, true);
+                xhr.onload = function () {
+                    if (xhr.status === 200) {
+                        const users = JSON.parse(xhr.responseText);
+                        renderUserTable(users);
+                        updateSortIcons('Felhasznalo', orderColumn, orderDir);
+                    }
+                };
+                xhr.send();
+            }
+
+            function fetchItems(orderColumn, orderDir) {
+                const xhr = new XMLHttpRequest();
+                xhr.open('GET', `fetch_items.php?orderColumn=${orderColumn}&orderDir=${orderDir}`, true);
+                xhr.onload = function () {
+                    if (xhr.status === 200) {
+                        const items = JSON.parse(xhr.responseText);
+                        renderItemTable(items);
+                        updateSortIcons('Termek', orderColumn, orderDir);
+                    }
+                };
+                xhr.send();
+            }
+
+            function renderUserTable(users) {
+                const tbody = document.querySelector("#Felhasznalo tbody");
+                tbody.innerHTML = "";
+
+                if (users.length > 0) {
+                    users.forEach(user => {
+                        const tr = document.createElement("tr");
+
+                        tr.innerHTML = `
+                            <td>${user.UserID}</td>
+                            <td>${user.Username}</td>
+                            <td>${user.Password}</td>
+                            <td>${user.UserTypeName}</td>
+                            <td><button onclick="Modositas(${user.UserID}, '${user.Username}', '${user.Password}', '${user.UserTypeID}')" class="btn btn-primary">Módosítás</button></td>
+                            <td><button onclick="Torles(${user.UserID})" class="btn btn-danger">Törlés</button></td>
+                        `;
+
+                        tbody.appendChild(tr);
+                    });
+                } else {
+                    tbody.innerHTML = "<tr><td colspan='6'>Nincs találat.</td></tr>";
+                }
+            }
+
+            function renderItemTable(items) {
+                const tbody = document.querySelector("#Termek tbody");
+                tbody.innerHTML = "";
+
+                if (items.length > 0) {
+                    items.forEach(item => {
+                        const tr = document.createElement("tr");
+
+                        tr.innerHTML = `
+                            <td>${item.ItemID}</td>
+                            <td>${item.ItemName}</td>
+                            <td>${item.Description}</td>
+                            <td>${item.Quantity}</td>
+                            <td>${item.RealQuantity}</td>
+                            <td>${item.MeasurementType}</td>
+                            <td>${item.ShelfName}</td>
+                            <td><button onclick="showEditProductModal(${item.ItemID}, '${item.ItemName}', '${item.Description}', ${item.Quantity}, ${item.RealQuantity}, '${item.MeasurementType}', '${item.ShelfName}')" class="btn btn-primary">Módosítás</button></td>
+                            <td><button onclick="deleteProduct(${item.ItemID})" class="btn btn-danger">Törlés</button></td>
+                        `;
+
+                        tbody.appendChild(tr);
+                    });
+                } else {
+                    tbody.innerHTML = "<tr><td colspan='9'>Nincs találat.</td></tr>";
+                }
+            }
+
+            function updateSortIcons(tableId, orderColumn, orderDir) {
+                const thElements = document.querySelectorAll(`#${tableId} th[data-column]`);
+                thElements.forEach(th => {
+                    const column = th.getAttribute('data-column');
+                    const icon = th.querySelector('i');
+                    if (column === orderColumn) {
+                        th.classList.add(orderDir === 'ASC' ? 'sorted-asc' : 'sorted-desc');
+                        th.classList.remove(orderDir === 'ASC' ? 'sorted-desc' : 'sorted-asc');
+                    } else {
+                        th.classList.remove('sorted-asc', 'sorted-desc');
+                    }
+                });
+            }
+
+            document.querySelectorAll("th[data-column]").forEach(th => {
+                th.addEventListener("click", function () {
+                    const orderColumn = this.getAttribute("data-column");
+                    const currentDir = this.getAttribute("data-dir");
+                    const newDir = currentDir === "ASC" ? "DESC" : "ASC";
+                    this.setAttribute("data-dir", newDir);
+
+                    if (this.closest("#Felhasznalo")) {
+                        fetchUsers(orderColumn, newDir);
+                    } else if (this.closest("#Termek")) {
+                        fetchItems(orderColumn, newDir);
+                    }
+                });
+            });
+
+            fetchUsers("Users.UserID", "ASC");
+            fetchItems("Items.ItemID", "ASC");
+        });
 
     </script>
 </body>
