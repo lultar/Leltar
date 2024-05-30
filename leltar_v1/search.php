@@ -43,13 +43,15 @@ if ($stmt) {
     // Display search results
     if (mysqli_num_rows($result) > 0) {
         while ($row = mysqli_fetch_assoc($result)) {
-            echo "Item ID: " . $row['ItemID'] . "<br>";
-            echo "Item Name: " . $row['ItemName'] . "<br>";
-            echo "Description: " . $row['Description'] . "<br>";
-            echo "Quantity: " . $row['Quantity'] . "<br>";
-            echo "Shelf: " . $row['ShelfName'] . "<br>";
+            echo "<div class='search-item'>";
+            echo "<div>";
+            echo "<strong>Item Name:</strong> " . $row['ItemName'] . "<br>";
+            echo "<strong>Description:</strong> " . $row['Description'] . "<br>";
+            echo "<strong>Quantity:</strong> " . $row['Quantity'] . "<br>";
+            echo "<strong>Shelf:</strong> " . $row['ShelfName'] . "<br>";
+            echo "</div>";
             echo "<button class='edit-button btn btn-primary' data-item-id='" . $row['ItemID'] . "' data-item-name='" . $row['ItemName'] . "' data-item-quantity='" . $row['Quantity'] . "' data-item-shelf='" . $row['ShelfName'] . "'>Edit</button>";
-            echo "<hr>";
+            echo "</div>";
         }
     } else {
         echo "No results found.";

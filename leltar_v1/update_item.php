@@ -6,13 +6,19 @@ include('db.php');
 $itemId = $_POST['itemId'];
 $itemQuantity = $_POST['itemQuantity'];
 $itemShelf = $_POST['itemShelf'];
+$itemBuilding = $_POST['itemBuilding'];
+$itemAisle = $_POST['itemAisle'];
 
 // Update item in the database
-$query = "UPDATE Items SET Quantity = ?, ShelfID = (SELECT ShelfID FROM Shelves WHERE ShelfName = ?) WHERE ItemID = ?";
+$query = "UPDATE Items 
+          SET Quantity = ?, 
+              ShelfID = (SELECT ShelfID FROM Shelves WHERE ShelfName = ?), 
+              AisleID = (SELECT AisleID FROM Aisles WHERE AisleName = ? AND BuildingID = (SELECT BuildingID FROM Buildings WHERE BuildingName = ?))
+          WHERE ItemID = ?";
 $stmt = mysqli_prepare($connection, $query);
 
 if ($stmt) {
-    mysqli_stmt_bind_param($stmt, 'dsi', $itemQuantity, $itemShelf, $itemId);
+    mysqli_stmt_bind_param($stmt, 'dsss', $itemQuantity, $itemShelf, $itemAisle, $itemBuilding, $itemId);
     if (mysqli_stmt_execute($stmt)) {
         echo "Item updated successfully";
     } else {

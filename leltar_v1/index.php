@@ -10,18 +10,24 @@
 <body>
     <div class="container">
         <h1>Dashboard</h1>
-        <label for="building">Select Building:</label>
-        <select id="building">
-            <option value="">Select Building</option>
-        </select>
+        <div class="form-group">
+            <label for="building">Select Building:</label>
+            <select id="building" class="form-control">
+                <option value="">Select Building</option>
+            </select>
+        </div>
 
-        <label for="aisle">Select Aisle:</label>
-        <select id="aisle" disabled>
-            <option value="">Select Aisle</option>
-        </select>
+        <div class="form-group">
+            <label for="aisle">Select Aisle:</label>
+            <select id="aisle" class="form-control" disabled>
+                <option value="">Select Aisle</option>
+            </select>
+        </div>
 
-        <label for="search-bar">Search Items:</label>
-        <input type="text" id="search-bar" placeholder="Search by name...">
+        <div class="form-group">
+            <label for="search-bar">Search Items:</label>
+            <input type="text" id="search-bar" class="form-control" placeholder="Search by name...">
+        </div>
 
         <div id="search-results"></div>
     </div>
@@ -50,6 +56,18 @@
                             <label for="itemShelf">Shelf</label>
                             <input type="text" class="form-control" id="itemShelf">
                         </div>
+                        <div class="form-group">
+                            <label for="itemBuilding">Building</label>
+                            <select class="form-control" id="itemBuilding">
+                                <!-- Options will be populated dynamically -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="itemAisle">Aisle</label>
+                            <select class="form-control" id="itemAisle">
+                                <!-- Options will be populated dynamically -->
+                            </select>
+                        </div>
                         <input type="hidden" id="itemId">
                     </form>
                 </div>
@@ -73,6 +91,7 @@
                     if (xhr.readyState === XMLHttpRequest.DONE) {
                         if (xhr.status === 200) {
                             document.getElementById('building').innerHTML = xhr.responseText;
+                            document.getElementById('itemBuilding').innerHTML = xhr.responseText;
                         } else {
                             console.error('Error fetching buildings: ' + xhr.status);
                         }
@@ -81,22 +100,27 @@
                 xhr.open('GET', 'get_buildings.php', true);
                 xhr.send();
             }
-            search("","","");
+            search("", "", "");
 
             populateBuildings();
 
-            function populateAisles(building) {
+            function populateAisles(building, targetId, currentAisle) {
                 var xhr = new XMLHttpRequest();
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState === XMLHttpRequest.DONE) {
                         if (xhr.status === 200) {
-                            document.getElementById('aisle').innerHTML = xhr.responseText;
-                            document.getElementById('aisle').disabled = false;
-                            document.getElementById('aisle').addEventListener('change', function() {
-                                var selectedBuilding = document.getElementById('building').value;
-                                var selectedAisle = this.value;
-                                search(selectedBuilding, selectedAisle, '');
-                            });
+                            document.getElementById(targetId).innerHTML = xhr.responseText;
+                            if (targetId === 'aisle') {
+                                document.getElementById(targetId).disabled = false;
+                                document.getElementById(targetId).addEventListener('change', function () {
+                                    var selectedBuilding = document.getElementById('building').value;
+                                    var selectedAisle = this.value;
+                                    search(selectedBuilding, selectedAisle, '');
+                                });
+                                if (currentAisle) {
+                                    document.getElementById(targetId).value = currentAisle;
+                                }
+                            }
                         } else {
                             console.error('Error fetching aisles: ' + xhr.status);
                         }
@@ -123,27 +147,34 @@
             }
 
             function addEditButtons() {
-                document.querySelectorAll('.edit-button').forEach(function(button) {
-                    button.addEventListener('click', function() {
+                document.querySelectorAll('.edit-button').forEach(function (button) {
+                    button.addEventListener('click', function () {
                         var itemId = this.dataset.itemId;
                         var itemName = this.dataset.itemName;
                         var itemQuantity = this.dataset.itemQuantity;
                         var itemShelf = this.dataset.itemShelf;
+                        var itemBuilding = document.getElementById('building').value;
+                        var itemAisle = document.getElementById('aisle').value;
 
                         document.getElementById('itemId').value = itemId;
                         document.getElementById('itemName').value = itemName;
                         document.getElementById('itemQuantity').value = itemQuantity;
                         document.getElementById('itemShelf').value = itemShelf;
 
+                        document.getElementById('itemBuilding').value = itemBuilding;
+                        populateAisles(itemBuilding, 'itemAisle', itemAisle);
+
                         $('#editModal').modal('show');
                     });
                 });
             }
 
-            window.saveChanges = function() {
+            window.saveChanges = function () {
                 var itemId = document.getElementById('itemId').value;
                 var itemQuantity = document.getElementById('itemQuantity').value;
                 var itemShelf = document.getElementById('itemShelf').value;
+                var itemBuilding = document.getElementById('itemBuilding').value;
+                var itemAisle = document.getElementById('itemAisle').value;
 
                 var xhr = new XMLHttpRequest();
                 xhr.onreadystatechange = function () {
@@ -161,13 +192,13 @@
                 };
                 xhr.open('POST', 'update_item.php', true);
                 xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                xhr.send('itemId=' + encodeURIComponent(itemId) + '&itemQuantity=' + encodeURIComponent(itemQuantity) + '&itemShelf=' + encodeURIComponent(itemShelf));
+                xhr.send('itemId=' + encodeURIComponent(itemId) + '&itemQuantity=' + encodeURIComponent(itemQuantity) + '&itemShelf=' + encodeURIComponent(itemShelf) + '&itemBuilding=' + encodeURIComponent(itemBuilding) + '&itemAisle=' + encodeURIComponent(itemAisle));
             }
 
             document.getElementById('building').addEventListener('change', function () {
                 var selectedBuilding = this.value;
                 if (selectedBuilding) {
-                    populateAisles(selectedBuilding);
+                    populateAisles(selectedBuilding, 'aisle');
                 } else {
                     document.getElementById('aisle').innerHTML = '<option value="">Select Aisle</option>';
                     document.getElementById('aisle').disabled = true;
