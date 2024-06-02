@@ -20,6 +20,6 @@
 
     $connection->close();
 
-    header("Location: admin/admin.php");
+    header("Location: admin.php");
     exit();
 ?>

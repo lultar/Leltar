@@ -44,9 +44,9 @@
             $_SESSION['UserType'] = $userType;
 
             if ($userType == 1) {
-                header("Location: admin/admin.php");
+                header("Location: admin.php");
             } elseif ($userType == 2) {
-                header("Location: user/user.php");
+                header("Location: user.php");
             } else {
                 echo "Érvénytelen felhasználói típus.";
             }

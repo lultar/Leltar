@@ -20,7 +20,7 @@
 
     $sql = "INSERT INTO Items (ItemName, Description, Quantity, RealQuantity, MeasurementTypeID, ShelfID) VALUES ('$item_name', '$description', '$quantity', '$real_quantity', '$measurement_type_id', '$shelf_id')";
     if (mysqli_query($connection, $sql)) {
-        header('Location: admin/admin.php');
+        header('Location: admin.php');
     } else {
         echo json_encode(['status' => 'error', 'message' => mysqli_error($connection)]);
     }
