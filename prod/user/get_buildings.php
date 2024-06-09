@@ -6,11 +6,18 @@ include('db.php');
 $query = "SELECT DISTINCT BuildingName FROM Buildings";
 $result = mysqli_query($connection, $query);
 
-// Populate building dropdown options
-echo "<option value=''>Select Building</option>";
-if(mysqli_num_rows($result) > 0) {
-    while($row = mysqli_fetch_assoc($result)) {
-        echo "<option value='" . $row['BuildingName'] . "'>" . $row['BuildingName'] . "</option>";
+if ($result) {
+    // Populate building dropdown options
+    echo "<option value=''>Select Building</option>";
+    if(mysqli_num_rows($result) > 0) {
+        while($row = mysqli_fetch_assoc($result)) {
+            echo "<option value='" . htmlspecialchars($row['BuildingName'], ENT_QUOTES, 'UTF-8') . "'>" . htmlspecialchars($row['BuildingName'], ENT_QUOTES, 'UTF-8') . "</option>";
+        }
     }
+} else {
+    // Handle query failure
+    echo "<option value=''>Error loading buildings</option>";
 }
+
+mysqli_close($connection);
 ?>
