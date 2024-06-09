@@ -161,7 +161,7 @@
                     if (xhr.readyState === XMLHttpRequest.DONE) {
                         if (xhr.status === 200) {
                             document.getElementById('building').innerHTML = xhr.responseText;
-                            document.getElementById('itemBuilding').innerHTML = xhr.responseText;
+                            //document.getElementById('itemBuilding').innerHTML = xhr.responseText;
                         } else {
                             console.error('Error fetching buildings: ' + xhr.status);
                         }
