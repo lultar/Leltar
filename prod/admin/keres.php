@@ -3,7 +3,7 @@
     require "db.php";
 
     if (!isset($_SESSION['UserID']) || $_SESSION['UserType'] != 1) {
-        header("Location: login.php");
+        header("Location: /Leltar/prod/index.php");
         exit();
     }
 

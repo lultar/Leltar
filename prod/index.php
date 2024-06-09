@@ -9,7 +9,7 @@
 <body>
     <div class="login-container">
         <h2>Bejelentkezés</h2>
-        <form action="login.php" method="post">
+        <form action="/Leltar/prod/index.php" method="post">
             <label for="username">Felhasználónév:</label>
             <input type="text" id="username" name="username" required>
             
@@ -24,7 +24,7 @@
 
 <?php
     session_start();
-    require "db.php";
+    require "admin/db.php";
 
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $username = $_POST['username'];
@@ -44,7 +44,7 @@
             $_SESSION['UserType'] = $userType;
 
             if ($userType == 1) {
-                header("Location: admin.php");
+                header("Location: admin/admin.php");
             } elseif ($userType == 2) {
                 header("Location: user/user.php");
             } else {

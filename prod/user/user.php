@@ -1,3 +1,14 @@
+<?php
+    session_start();
+    require "db.php";
+
+    if (!isset($_SESSION['UserID']) || $_SESSION['UserType'] != 2) {
+        header("Location: /Leltar/prod/logout.php");
+        exit();
+    }
+    $username = isset($_SESSION['Username']) ? $_SESSION['Username'] : 'User';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -39,11 +50,33 @@
             background: rgba(0, 0, 0, 0.5);
             z-index: 999;
         }
+
+        /* Navbar styles */
+        .navbar-custom {
+            background-color: #ffffff;
+            border-bottom: 1px solid #e0e0e0;
+        }
     </style>
 </head>
 <body>
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <a class="navbar-brand" href="#">Dashboard</a>
+        <button class="navbar-toggler navbar-light" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <span class="nav-link"><?php echo htmlspecialchars($username); ?></span>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/Leltar/prod/index.php">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
     <div class="container">
-        <h1>Dashboard</h1>
         <div class="form-group">
             <label for="building">Select Building:</label>
             <select id="building" class="form-control">

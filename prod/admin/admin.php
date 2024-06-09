@@ -30,7 +30,7 @@
     }
 
     if (!isset($_SESSION['UserID']) || $_SESSION['UserType'] != 1) {
-        header("Location: login.php");
+        header("Location: /Leltar/prod/logout.php");
         exit();
     }
     $username = isset($_SESSION['Username']) ? $_SESSION['Username'] : 'Admin';
@@ -51,7 +51,7 @@
         <div class="dropdown" style="float: right;">
         <button class="tablinks"><?php echo htmlspecialchars($username); ?></button>        
         <div class="dropdown-content">
-            <a href="login.php">Kijelentkezés</a>
+            <a href="/Leltar/prod/logout.php">Kijelentkezés</a>
         </div>
     </div>
     </div>
