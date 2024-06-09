@@ -6,40 +6,6 @@
     <title>Dashboard</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        /* Spinner styles */
-        .spinner {
-            display: none;
-            width: 50px;
-            height: 50px;
-            border: 5px solid #f3f3f3;
-            border-radius: 50%;
-            border-top: 5px solid #3498db;
-            animation: spin 1s linear infinite;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            z-index: 1000;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Overlay styles */
-        .overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-        }
-    </style>
 </head>
 <body>
     <div class="container">
@@ -113,28 +79,13 @@
         </div>
     </div>
 
-    <!-- Loading Spinner and Overlay -->
-    <div class="overlay"></div>
-    <div class="spinner"></div>
-
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            function showSpinner() {
-                document.querySelector('.overlay').style.display = 'block';
-                document.querySelector('.spinner').style.display = 'block';
-            }
-
-            function hideSpinner() {
-                document.querySelector('.overlay').style.display = 'none';
-                document.querySelector('.spinner').style.display = 'none';
-            }
-
             function populateBuildings() {
-                showSpinner();
                 var xhr = new XMLHttpRequest();
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState === XMLHttpRequest.DONE) {
@@ -144,7 +95,6 @@
                         } else {
                             console.error('Error fetching buildings: ' + xhr.status);
                         }
-                        hideSpinner();
                     }
                 };
                 xhr.open('GET', 'get_buildings.php', true);
@@ -155,7 +105,6 @@
             populateBuildings();
 
             function populateAisles(building, targetId, currentAisle) {
-                showSpinner();
                 var xhr = new XMLHttpRequest();
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState === XMLHttpRequest.DONE) {
@@ -175,7 +124,6 @@
                         } else {
                             console.error('Error fetching aisles: ' + xhr.status);
                         }
-                        hideSpinner();
                     }
                 };
                 xhr.open('GET', 'get_aisles.php?building=' + encodeURIComponent(building), true);
@@ -183,7 +131,6 @@
             }
 
             function search(building, aisle, searchTerm) {
-                showSpinner();
                 var xhr = new XMLHttpRequest();
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState === XMLHttpRequest.DONE) {
@@ -193,7 +140,6 @@
                         } else {
                             console.error('Error fetching search results: ' + xhr.status);
                         }
-                        hideSpinner();
                     }
                 };
                 xhr.open('GET', 'search.php?building=' + encodeURIComponent(building) + '&aisle=' + encodeURIComponent(aisle) + '&search=' + encodeURIComponent(searchTerm), true);
@@ -224,7 +170,6 @@
             }
 
             window.saveChanges = function () {
-                showSpinner();
                 var itemId = document.getElementById('itemId').value;
                 var itemQuantity = document.getElementById('itemQuantity').value;
                 var itemShelf = document.getElementById('itemShelf').value;
@@ -243,7 +188,6 @@
                         } else {
                             alert('Error saving changes: ' + xhr.status);
                         }
-                        hideSpinner();
                     }
                 };
                 xhr.open('POST', 'update_item.php', true);
