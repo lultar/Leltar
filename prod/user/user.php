@@ -123,18 +123,6 @@
                             <label for="itemShelf">Shelf</label>
                             <input type="text" class="form-control" id="itemShelf">
                         </div>
-                        <div class="form-group">
-                            <label for="itemBuilding">Building</label>
-                            <select class="form-control" id="itemBuilding">
-                                <!-- Options will be populated dynamically -->
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="itemAisle">Aisle</label>
-                            <select class="form-control" id="itemAisle">
-                                <!-- Options will be populated dynamically -->
-                            </select>
-                        </div>
                         <input type="hidden" id="itemId">
                     </form>
                 </div>
@@ -240,16 +228,11 @@
                         var itemName = this.dataset.itemName;
                         var itemQuantity = this.dataset.itemQuantity;
                         var itemShelf = this.dataset.itemShelf;
-                        var itemBuilding = document.getElementById('building').value;
-                        var itemAisle = document.getElementById('aisle').value;
 
                         document.getElementById('itemId').value = itemId;
                         document.getElementById('itemName').value = itemName;
                         document.getElementById('itemQuantity').value = itemQuantity;
                         document.getElementById('itemShelf').value = itemShelf;
-
-                        document.getElementById('itemBuilding').value = itemBuilding;
-                        populateAisles(itemBuilding, 'itemAisle', itemAisle);
 
                         $('#editModal').modal('show');
                     });
@@ -261,27 +244,24 @@
                 var itemId = document.getElementById('itemId').value;
                 var itemQuantity = document.getElementById('itemQuantity').value;
                 var itemShelf = document.getElementById('itemShelf').value;
-                var itemBuilding = document.getElementById('itemBuilding').value;
-                var itemAisle = document.getElementById('itemAisle').value;
 
                 var xhr = new XMLHttpRequest();
                 xhr.onreadystatechange = function () {
                     if (xhr.readyState === XMLHttpRequest.DONE) {
                         if (xhr.status === 200) {
-                            alert('Changes saved successfully');
                             $('#editModal').modal('hide');
-                            var selectedBuilding = document.getElementById('building').value;
-                            var selectedAisle = document.getElementById('aisle').value;
-                            search(selectedBuilding, selectedAisle, '');
+                            hideSpinner();
+                            //search("", "", "");
+                            search(document.getElementById('building').value, document.getElementById('aisle').value, document.getElementById('search-bar').value);
                         } else {
+                        hideSpinner();
                             alert('Error saving changes: ' + xhr.status);
                         }
-                        hideSpinner();
                     }
                 };
                 xhr.open('POST', 'update_item.php', true);
                 xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                xhr.send('itemId=' + encodeURIComponent(itemId) + '&itemQuantity=' + encodeURIComponent(itemQuantity) + '&itemShelf=' + encodeURIComponent(itemShelf) + '&itemBuilding=' + encodeURIComponent(itemBuilding) + '&itemAisle=' + encodeURIComponent(itemAisle));
+                xhr.send('itemId=' + encodeURIComponent(itemId) + '&itemQuantity=' + encodeURIComponent(itemQuantity) + '&itemShelf=' + encodeURIComponent(itemShelf));
             }
 
             document.getElementById('building').addEventListener('change', function () {

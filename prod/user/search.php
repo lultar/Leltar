@@ -8,7 +8,7 @@ $selectedAisle = $_GET['aisle'];
 $searchTerm = $_GET['search'];
 
 // Construct SQL query based on selected building, aisle, and search term
-$query = "SELECT Items.ItemID, Items.ItemName, Items.Description, Items.Quantity, Shelves.ShelfName 
+$query = "SELECT Items.ItemID, Items.ItemName, Items.Description, Items.Quantity, Shelves.ShelfName, Aisles.AisleName, Buildings.BuildingName
           FROM Items 
           INNER JOIN Shelves ON Items.ShelfID = Shelves.ShelfID 
           INNER JOIN Aisles ON Shelves.AisleID = Aisles.AisleID 
@@ -49,6 +49,8 @@ if ($stmt) {
             echo "<strong>Description:</strong> " . $row['Description'] . "<br>";
             echo "<strong>Quantity:</strong> " . $row['Quantity'] . "<br>";
             echo "<strong>Shelf:</strong> " . $row['ShelfName'] . "<br>";
+            echo "<strong>Aisle:</strong> " . $row['AisleName'] . "<br>";
+            echo "<strong>Building:</strong> " . $row['BuildingName'] . "<br>";
             echo "</div>";
             echo "<button class='edit-button btn btn-primary' data-item-id='" . $row['ItemID'] . "' data-item-name='" . $row['ItemName'] . "' data-item-quantity='" . $row['Quantity'] . "' data-item-shelf='" . $row['ShelfName'] . "'>Edit</button>";
             echo "</div>";
