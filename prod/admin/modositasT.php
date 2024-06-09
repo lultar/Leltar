@@ -9,7 +9,7 @@
     $measurement_type = $_POST['measurement_type'];
     $shelf_name = $_POST['shelf_name'];
 
-    $measurement_type_query = "SELECT MeasurementTypeID FROM MeasurementTypes WHERE MeasurementType = '$measurement_type'";
+    $measurement_type_query = "SELECT MeasurementTypeID FROM MeasurementTypes WHERE MeasurementType = '$measurement_type' OR MeasurementTypeID = '$measurement_type'";
     $result = mysqli_query($connection, $measurement_type_query);
     $row = mysqli_fetch_assoc($result);
     $measurement_type_id = $row['MeasurementTypeID'];

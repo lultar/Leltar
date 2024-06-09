@@ -46,7 +46,7 @@
             if ($userType == 1) {
                 header("Location: admin.php");
             } elseif ($userType == 2) {
-                header("Location: user.php");
+                header("Location: user/user.php");
             } else {
                 echo "Érvénytelen felhasználói típus.";
             }
