@@ -129,7 +129,7 @@ $result = $connection->query($sql);
             // Add an event listener to detect when the print dialog is closed
             window.addEventListener('afterprint', function() {
                 // Redirect to the home page
-                window.location.href = "/";
+                window.location.href = "admin.php";
             });
         };
     </script>
