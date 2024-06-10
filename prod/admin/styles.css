@@ -9,7 +9,10 @@
 /* Style the body */
 body {
     line-height: 1.6;
-    background-color: #f4f4f4;
+    font-family: Arial, sans-serif;
+    background-image: url('/Leltar/prod/imgs/bacground.gif');
+    background-color: #feefd8;
+    background-repeat: repeat-x;
     color: #333;
 }
 

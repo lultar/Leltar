@@ -49,13 +49,8 @@
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(3px);
             z-index: 999;
-        }
-
-        /* Navbar styles */
-        .navbar-custom {
-            background-color: #ffffff;
-            border-bottom: 1px solid #e0e0e0;
         }
     </style>
 </head>
