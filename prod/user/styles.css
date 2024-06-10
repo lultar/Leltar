@@ -10,10 +10,13 @@ body {
     font-family: 'Arial', sans-serif;
     line-height: 1.6;
     background-image: url('/Leltar/prod/imgs/background.gif');
-    background-color: #feefd8;
-    background-repeat: repeat;
+    background-repeat: repeat-x;
+    background-size: auto 100%;
+    background-attachment: fixed;
     color: #333;
-    padding: 20px;
+    margin: 0;
+    padding: 0;
+    height: 100%;
 }
 
 /* Center the content */
