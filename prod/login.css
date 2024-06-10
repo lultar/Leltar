@@ -53,7 +53,7 @@ body {
 
 .logo {
     display: flex;
-    max-width: 64px;
+    width: 64px;
 }
 
 .login-text {
