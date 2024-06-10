@@ -10,7 +10,7 @@
 <body>
     <div class="login-container">
         <div class="container" id="logo-cont">
-            <img src="/Leltar/prod/imgs/colored/icons8-quantum-512.png" alt="Logo" class="logo">
+            <img src="/Leltar/prod/imgs/colored/icons8-quantum-64.png" alt="Logo" class="logo">
             <h2 class="login-text">Bejelentkezés</h2>
         </div>
         <form action="/Leltar/prod/index.php" method="post">

@@ -1,6 +1,7 @@
 body {
     font-family: Arial, sans-serif;
     background-image: url('/Leltar/prod/imgs/bacground.gif');
+    background-repeat: repeat-x;
     display: flex;
     justify-content: center;
     align-items: center;
