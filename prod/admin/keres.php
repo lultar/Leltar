@@ -19,7 +19,7 @@
     $sql = "SELECT Users.UserID, Users.Username, Users.Password, UserTypes.UserTypeID, UserTypes.UserTypeName 
             FROM Users 
             INNER JOIN UserTypes ON Users.UserType = UserTypes.UserTypeID 
-            WHERE UserTypeID = '2' AND $field LIKE '%$query%' 
+            WHERE $field LIKE '%$query%' 
             ORDER BY Users.UserID";
 
     $result = mysqli_query($connection, $sql);

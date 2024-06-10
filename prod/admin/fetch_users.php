@@ -4,7 +4,7 @@
     $orderColumn = isset($_GET['orderColumn']) ? $_GET['orderColumn'] : 'Users.UserID';
     $orderDir = isset($_GET['orderDir']) ? $_GET['orderDir'] : 'ASC';
 
-    $sql = "SELECT Users.UserID, Users.Username, Users.Password, UserTypes.UserTypeID, UserTypes.UserTypeName FROM Users INNER JOIN UserTypes ON Users.UserType = UserTypes.UserTypeID WHERE UserTypeID = '2' ORDER BY $orderColumn $orderDir";
+    $sql = "SELECT Users.UserID, Users.Username, Users.Password, UserTypes.UserTypeID, UserTypes.UserTypeName FROM Users INNER JOIN UserTypes ON Users.UserType = UserTypes.UserTypeID ORDER BY $orderColumn $orderDir";
     $result = mysqli_query($connection, $sql);
 
     $userData = [];
