@@ -1,6 +1,6 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    background-image: url('/Leltar/prod/imgs/bacground.gif');
     display: flex;
     justify-content: center;
     align-items: center;
@@ -49,4 +49,25 @@ body {
 
 .login-container button[type="submit"]:hover {
     background-color: #0056b3;
+}
+
+.logo {
+    display: flex;
+    max-width: 64px;
+}
+
+.login-text {
+    display: flex;
+
+}
+
+#logo-cont {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 30px;
+    flex-wrap: nowrap;
+    align-content: center;
+    align-items: center;
+    flex-direction: row-reverse;
+    margin-bottom: 30px;
 }
