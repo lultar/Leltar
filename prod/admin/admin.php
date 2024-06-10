@@ -4,7 +4,7 @@
 
     $error_message = isset($_GET['error']) ? $_GET['error'] : '';
 
-    $sql = "SELECT Users.UserID, Users.Username, Users.Password, UserTypes.UserTypeID, UserTypes.UserTypeName FROM Users INNER JOIN UserTypes ON Users.UserType = UserTypes.UserTypeID WHERE UserTypeID = '2' ORDER BY Users.UserID";
+    $sql = "SELECT Users.UserID, Users.Username, Users.Password, UserTypes.UserTypeID, UserTypes.UserTypeName FROM Users INNER JOIN UserTypes ON Users.UserType = UserTypes.UserTypeID ORDER BY Users.UserID";
     $result = mysqli_query($connection, $sql);
 
     $userData = [];
@@ -49,6 +49,7 @@
     <div class="tab">
         <button class="tablinks" onclick="changeTab(event, 'Felhasznalo')">Felhasználók kezelése</button>
         <button class="tablinks" onclick="changeTab(event, 'Termek')">Termékek kezelése</button>
+        <a class="print" href="print.php">Nyomtatás</a>
         <div class="dropdown" style="float: right;">
         <button class="tablinks"><?php echo htmlspecialchars($username); ?></button>        
         <div class="dropdown-content">

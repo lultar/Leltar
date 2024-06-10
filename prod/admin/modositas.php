@@ -4,29 +4,22 @@
     if (isset($_POST['user_id']) && isset($_POST['username']) && isset($_POST['password']) && isset($_POST['user_type'])) {
         $userID = intval($_POST['user_id']);
         $username = $_POST['username'];
-        $password = $_POST['password'];
+        $password = password_hash($_POST['password'], PASSWORD_BCRYPT); 
         $userType = $_POST['user_type'];
 
-        $stmt_check = $connection->prepare("SELECT UserID FROM Users WHERE Username = ?");
-        $stmt_check->bind_param("s", $username);
-        $stmt_check->execute();
-        $stmt_check->store_result();
-        
-        if ($stmt_check->num_rows > 0) {
-            header("Location: admin.php?error=Nem sikerült módosítani az adatokat");
-            exit();
+        $stmt = $connection->prepare("UPDATE Users SET Username = ?, Password = ?, UserType = ? WHERE UserID = ?");
+        if (!$stmt) {
+            die("Prepare failed: (" . $connection->errno . ") " . $connection->error);
         }
 
-        $stmt_check->close();
-
-        $stmt = $connection->prepare("UPDATE Users SET Username = ?, Password = ?, UserType = ? WHERE UserID = ?");
-        $stmt->bind_param("ssii", $username, $password, $userType, $userID);
+        $stmt->bind_param("sssi", $username, $password, $userType, $userID);
 
         if ($stmt->execute()) {
-            header("Location: admin.php");
+            header("Location: admin.php?success=Sikeresen módosítva");
             exit();
         } else {
-            header("Location: admin.php?error=Nem sikerült módosítani az adatokat");
+            $error_message = $stmt->error;
+            header("Location: admin.php?error=Nem sikerült módosítani az adatokat: " . urlencode($error_message));
             exit();
         }
 
