@@ -19,7 +19,7 @@ $result = $connection->query($sql);
     <meta charset="UTF-8">
     <link rel="icon" type="image/x-icon" href="/Leltar/prod/imgs/colored/icons8-quantum-64.png">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quantum Storage & Logistics</title>
+    <title>Quantum Storage & Logistics <?php echo date('Y-m-d H_i'); ?></title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -56,6 +56,18 @@ $result = $connection->query($sql);
         .arrow-down::after {
             content: ' \2193'; /* Down arrow */
         }
+        .title {
+            display: flex;
+            flex-wrap: nowrap;
+            flex-direction: row;
+            align-content: center;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            width: 64px;
+        }
 
         @media print {
             .more {
@@ -70,11 +82,19 @@ $result = $connection->query($sql);
             body {
                 -webkit-print-color-adjust: exact; /* Ensures colors are printed accurately */
             }
+            table {
+                padding: 0px !important;
+                margin: 0px !important;
+                border: 2px solid black !important;
+            }
         }
     </style>
 </head>
 <body>
-    <h1>Items Report</h1>
+    <div class="title">
+        <h1>Items Report</h1>
+        <img src="/Leltar/prod/imgs/outline/icons8-quantum-64.png" alt="Logo" class="logo">
+    </div>
     <table>
         <thead>
             <tr>

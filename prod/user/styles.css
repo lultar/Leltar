@@ -9,7 +9,7 @@ body, h1, label, select, div, input {
 body {
     font-family: 'Arial', sans-serif;
     line-height: 1.6;
-    background-image: url('/Leltar/prod/imgs/bacground.gif');
+    background-image: url('/Leltar/prod/imgs/background.gif');
     background-color: #feefd8;
     background-repeat: repeat;
     color: #333;
@@ -23,6 +23,7 @@ body {
     padding: 20px;
     backdrop-filter: blur(10px);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    background-color: rgba(255, 255, 255, 0.3);
     border-radius: 10px;
 }
 
@@ -56,10 +57,11 @@ select, input {
 /* Style the search results */
 #search-results {
     margin-top: 20px;
-    padding: 20px;
+    padding: 10px;
     backdrop-filter: blur(30px);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 15px;
 }
 
 /* Style individual search result items */
@@ -67,11 +69,12 @@ select, input {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px;
+    padding: 5px;
     background-color: #fff;
     border-radius: 5px;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    background-color: rgba(255, 255, 255, 0.6);
 }
 
 /* Style the edit button */
@@ -135,11 +138,67 @@ select, input {
     backdrop-filter: blur(30px);
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    background-color: rgba(255, 255, 255, 0.3);
     padding: 10px;
-    border-radius: 5px;
+    border-radius: 15px;
     margin-bottom: 10px;
 }
 
 .navbar-custom a{
     color: #000000;
+}
+
+.modal-content {
+    background-color: rgba(255, 255, 255, 0.5);
+    backdrop-filter: blur(5px);
+    border-radius: 10px;
+    color: black;
+}
+
+.modal-header {
+    border-bottom: none;
+}
+
+.modal-footer {
+    border-top: none;
+}
+
+.modal-box {
+    padding: 20px;
+}
+
+.modal-box label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.modal-box input[type="text"], 
+.modal-box input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}
+
+.modal-box button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.modal-box button.close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.modal-box button[type="submit"] {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.modal-box button[type="submit"]:hover {
+    background-color: #0056b3;
 }

@@ -1,8 +1,9 @@
 body {
     font-family: Arial, sans-serif;
-    background-image: url('/Leltar/prod/imgs/bacground.gif');
+    background-image: url('/Leltar/prod/imgs/background.gif');
     background-color: #feefd8;
     background-repeat: repeat-x;
+    background-size: cover;
     display: flex;
     justify-content: center;
     align-items: center;
