@@ -93,7 +93,7 @@ $result = $connection->query($sql);
             <?php
             if ($result->num_rows > 0) {
                 while($row = $result->fetch_assoc()) {
-                    $difference = $row["RealQuantity"] - $row["Quantity"];
+                    $difference = $row["Quantity"] - $row["RealQuantity"];
                     $class = '';
                     $arrow = '';
                     if ($difference > 0) {
