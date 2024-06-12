@@ -1,12 +1,12 @@
 <?php
-// Include database connection
+ 
 include('db.php');
 
-// Fetch distinct building names
+ 
 $query = "SELECT DISTINCT BuildingName FROM Buildings";
 $result = mysqli_query($connection, $query);
 
-// Populate building dropdown options
+ 
 echo "<optgroup label='Building'>";
 if(mysqli_num_rows($result) > 0) {
     while($row = mysqli_fetch_assoc($result)) {
@@ -15,11 +15,11 @@ if(mysqli_num_rows($result) > 0) {
 }
 echo "</optgroup>";
 
-// Fetch distinct aisle names
+ 
 $query = "SELECT DISTINCT AisleName FROM Aisles";
 $result = mysqli_query($connection, $query);
 
-// Populate aisle dropdown options
+ 
 echo "<optgroup label='Aisle'>";
 if(mysqli_num_rows($result) > 0) {
     while($row = mysqli_fetch_assoc($result)) {
@@ -28,6 +28,6 @@ if(mysqli_num_rows($result) > 0) {
 }
 echo "</optgroup>";
 
-// Close database connection
+ 
 mysqli_close($connection);
 ?>

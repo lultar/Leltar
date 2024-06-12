@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="styles.css">
     <style>
-        /* Spinner styles */
+         
         .spinner {
             display: none;
             width: 50px;
@@ -40,7 +40,7 @@
             100% { transform: rotate(360deg); }
         }
 
-        /* Overlay styles */
+         
         .overlay {
             display: none;
             position: fixed;
@@ -95,7 +95,7 @@
         <div id="search-results"></div>
     </div>
 
-    <!-- Modal -->
+     
     <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -130,7 +130,7 @@
         </div>
     </div>
 
-    <!-- Loading Spinner and Overlay -->
+     
     <div class="overlay"></div>
     <div class="spinner"></div>
 
@@ -157,7 +157,7 @@
                     if (xhr.readyState === XMLHttpRequest.DONE) {
                         if (xhr.status === 200) {
                             document.getElementById('building').innerHTML = xhr.responseText;
-                            //document.getElementById('itemBuilding').innerHTML = xhr.responseText;
+                             
                         } else {
                             console.error('Error fetching buildings: ' + xhr.status);
                         }
@@ -247,7 +247,7 @@
                         if (xhr.status === 200) {
                             $('#editModal').modal('hide');
                             hideSpinner();
-                            //search("", "", "");
+                             
                             search(document.getElementById('building').value, document.getElementById('aisle').value, document.getElementById('search-bar').value);
                         } else {
                         hideSpinner();

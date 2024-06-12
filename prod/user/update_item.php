@@ -1,13 +1,13 @@
 <?php
-// Include database connection
+ 
 include('db.php');
 
-// Get item details from POST request
+ 
 $itemId = $_POST['itemId'];
 $itemQuantity = $_POST['itemQuantity'];
 $itemShelf = $_POST['itemShelf'];
 
-// Update item in the database
+ 
 $query = "UPDATE Items 
           SET Quantity = ?, 
               ShelfID = (SELECT ShelfID FROM Shelves WHERE ShelfName = ?)
@@ -26,6 +26,6 @@ if ($stmt) {
     echo "Error preparing statement: " . mysqli_error($connection);
 }
 
-// Close database connection
+ 
 mysqli_close($connection);
 ?>

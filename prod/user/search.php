@@ -1,13 +1,13 @@
 <?php
-// Include database connection
+ 
 include('db.php');
 
-// Get selected building, aisle, and search term from request
+ 
 $selectedBuilding = $_GET['building'];
 $selectedAisle = $_GET['aisle'];
 $searchTerm = $_GET['search'];
 
-// Construct SQL query based on selected building, aisle, and search term
+ 
 $query = "SELECT Items.ItemID, Items.ItemName, Items.Description, Items.Quantity, Shelves.ShelfName, Aisles.AisleName, Buildings.BuildingName
           FROM Items 
           INNER JOIN Shelves ON Items.ShelfID = Shelves.ShelfID 
@@ -30,7 +30,7 @@ if (!empty($searchTerm)) {
     $params[] = '%' . $searchTerm . '%';
 }
 
-// Prepare and execute the query
+ 
 $stmt = mysqli_prepare($connection, $query);
 if ($stmt) {
     if (!empty($params)) {
@@ -40,7 +40,7 @@ if ($stmt) {
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
 
-    // Display search results
+     
     if (mysqli_num_rows($result) > 0) {
         while ($row = mysqli_fetch_assoc($result)) {
             echo "<div class='search-item'>";
@@ -64,6 +64,6 @@ if ($stmt) {
     echo "Error preparing statement: " . mysqli_error($connection);
 }
 
-// Close database connection
+ 
 mysqli_close($connection);
 ?>

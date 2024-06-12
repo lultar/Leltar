@@ -1,11 +1,11 @@
-/* Reset some default styles */
+ 
 body, h1, label, select, div, input {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-/* Style the body */
+ 
 body {
     font-family: 'Arial', sans-serif;
     line-height: 1.6;
@@ -19,7 +19,7 @@ body {
     height: 100%;
 }
 
-/* Center the content */
+ 
 .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -30,25 +30,25 @@ body {
     border-radius: 10px;
 }
 
-/* Style the heading */
+ 
 h1 {
     font-size: 2.5em;
     margin-bottom: 20px;
     text-align: center;
 }
 
-/* Style the form labels */
+ 
 label {
     margin-bottom: 5px;
     font-weight: bold;
 }
 
-/* Style the form groups */
+ 
 .form-group {
     margin-bottom: 20px;
 }
 
-/* Style the select and input elements */
+ 
 select, input {
     width: 100%;
     padding: 10px;
@@ -57,7 +57,7 @@ select, input {
     font-size: 1em;
 }
 
-/* Style the search results */
+ 
 #search-results {
     margin-top: 20px;
     padding: 10px;
@@ -67,7 +67,7 @@ select, input {
     border-radius: 15px;
 }
 
-/* Style individual search result items */
+ 
 .search-item {
     display: flex;
     justify-content: space-between;
@@ -80,13 +80,13 @@ select, input {
     background-color: rgba(255, 255, 255, 0.6);
 }
 
-/* Style the edit button */
+ 
 .edit-button {
     margin-left: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
 
-/* Responsive styles */
+ 
 @media (max-width: 768px) {
     h1 {
         font-size: 2em;
@@ -114,7 +114,7 @@ select, input {
         padding: 5px;
     }
 }
-/* Add this to styles.css */
+ 
 .navbar-brand {
     font-size: 1.5em;
 }
@@ -136,7 +136,7 @@ select, input {
     border-radius: 5px;
 }
 
-/* Custom navbar background color */
+ 
 .navbar-custom {
     backdrop-filter: blur(30px);
     border-radius: 5px;

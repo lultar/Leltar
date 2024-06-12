@@ -2,7 +2,7 @@
  require "db.php";
 
 
-// Fetch item data
+ 
 $sql = "SELECT i.ItemName, i.Description, i.Quantity, i.RealQuantity, m.MeasurementType, s.ShelfName, a.AisleName, b.BuildingName 
         FROM Items i 
         LEFT JOIN MeasurementTypes m ON i.MeasurementTypeID = m.MeasurementTypeID 
@@ -43,18 +43,18 @@ $result = $connection->query($sql);
             background-color: #f9f9f9;
         }
         .more {
-            background-color: #d4edda; /* Light green */
-            color: #155724; /* Dark green */
+            background-color: #d4edda;  
+            color: #155724;  
         }
         .less {
-            background-color: #f8d7da; /* Light red */
-            color: #721c24; /* Dark red */
+            background-color: #f8d7da;  
+            color: #721c24;  
         }
         .arrow-up::after {
-            content: ' \2191'; /* Up arrow */
+            content: ' \2191';  
         }
         .arrow-down::after {
-            content: ' \2193'; /* Down arrow */
+            content: ' \2193';  
         }
         .title {
             display: flex;
@@ -71,16 +71,16 @@ $result = $connection->query($sql);
 
         @media print {
             .more {
-                background-color: #d4edda !important; /* Light green */
-                color: #155724 !important; /* Dark green */
+                background-color: #d4edda !important;  
+                color: #155724 !important;  
             }
             .less {
-                background-color: #f8d7da !important; /* Light red */
-                color: #721c24 !important; /* Dark red */
+                background-color: #f8d7da !important;  
+                color: #721c24 !important;  
             }
 
             body {
-                -webkit-print-color-adjust: exact; /* Ensures colors are printed accurately */
+                -webkit-print-color-adjust: exact;  
             }
             table {
                 padding: 0px !important;
@@ -143,12 +143,12 @@ $result = $connection->query($sql);
     </table>
     <script type="text/javascript">
         window.onload = function() {
-            // Trigger print dialog
+             
             window.print();
             
-            // Add an event listener to detect when the print dialog is closed
+             
             window.addEventListener('afterprint', function() {
-                // Redirect to the home page
+                 
                 window.location.href = "admin.php";
             });
         };

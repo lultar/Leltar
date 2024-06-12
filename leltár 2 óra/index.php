@@ -22,7 +22,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            // Function to fetch and populate building options
+             
             function populateBuildings() {
                 var xhr = new XMLHttpRequest();
                 xhr.onreadystatechange = function () {
@@ -38,10 +38,10 @@
                 xhr.send();
             }
 
-            // Initial population of building options
+             
             populateBuildings();
 
-            // Function to fetch and populate aisle options based on selected building
+             
             function populateAisles(building) {
                 var xhr = new XMLHttpRequest();
                 xhr.onreadystatechange = function () {
@@ -49,7 +49,7 @@
                         if (xhr.status === 200) {
                             document.getElementById('aisle').innerHTML = xhr.responseText;
                             document.getElementById('aisle').disabled = false;
-                            // Automatically run search when aisle is selected
+                             
                             document.getElementById('aisle').addEventListener('change', function() {
                                 var selectedBuilding = document.getElementById('building').value;
                                 var selectedAisle = this.value;
@@ -64,7 +64,7 @@
                 xhr.send();
             }
 
-            // Function to perform search based on selected building and aisle
+             
             function search(building, aisle) {
                 var xhr = new XMLHttpRequest();
                 xhr.onreadystatechange = function () {
@@ -80,7 +80,7 @@
                 xhr.send();
             }
 
-            // Populate aisles when building is selected
+             
             document.getElementById('building').addEventListener('change', function () {
                 var selectedBuilding = this.value;
                 if (selectedBuilding) {
@@ -89,7 +89,7 @@
                     document.getElementById('aisle').innerHTML = '<option value="">Select Aisle</option>';
                     document.getElementById('aisle').disabled = true;
                 }
-                // Automatically run search when building is selected
+                 
                 search(selectedBuilding, '');
             });
         });

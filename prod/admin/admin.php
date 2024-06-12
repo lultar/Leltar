@@ -65,7 +65,7 @@
         </div>
     </div>
 
-    <!-- Error üzenet -->
+     
     <div id="error-alert" class="alert alert-danger" role="alert" style="display: none;">
         <?php echo htmlspecialchars($error_message); ?>
         <button type="button" class="close" onclick="closeAlert()">&times;</button>
@@ -121,7 +121,7 @@
         </table>
     </div>
 
-    <!-- Termékek kezelése tab content -->
+     
     <div id="Termek" class="tabcontent">
         <div class="user-management-container">
             <h3 class="user-management-title">Termékek kezelése</h3>
@@ -184,7 +184,7 @@
         </table>
     </div>
 
-    <!-- Modal -->
+     
     <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -245,7 +245,7 @@
         </div>
     </div>
 
-    <!-- Modal for editing products -->
+     
     <div class="modal fade" id="editProductModal" tabindex="-1" role="dialog" aria-labelledby="editProductModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
@@ -282,7 +282,7 @@
         </div>
     </div>
 
-    <!-- Modal for adding products -->
+     
     <div class="modal fade" id="addProductModal" tabindex="-1" role="dialog" aria-labelledby="addProductModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">

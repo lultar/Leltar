@@ -72,7 +72,7 @@
         <br><br>
 
         <h3>Tárgy Információ</h3>
-        <!--<input type="text" id="warehouse" placeholder="Raktár">-->
+         
             <label for="building">Select Building:</label>
         <select id="building">
             <option value="">Select Building</option>
@@ -82,7 +82,7 @@
         <select id="aisle" disabled>
             <option value="">Select Aisle</option>
         </select>
-        <!--<input type="text" id="aisles" placeholder="Sor">-->
+         
         <input type="text" id="shelf" placeholder="Polc">
         <input type="number" id="measurment" min="0" placeholder="Mennyiség">
         <input type="text"  placeholder="Mértékegység">
@@ -93,7 +93,7 @@
     <script>
 
     document.addEventListener('DOMContentLoaded', function () {
-            // Function to fetch and populate building options
+             
             function populateBuildings() {
                 var xhr = new XMLHttpRequest();
                 xhr.onreadystatechange = function () {
@@ -111,10 +111,10 @@
 
             search('', '', '')
 
-            // Initial population of building options
+             
             populateBuildings();
 
-            // Function to fetch and populate aisle options based on selected building
+             
             function populateAisles(building) {
                 var xhr = new XMLHttpRequest();
                 xhr.onreadystatechange = function () {
@@ -122,7 +122,7 @@
                         if (xhr.status === 200) {
                             document.getElementById('aisle').innerHTML = xhr.responseText;
                             document.getElementById('aisle').disabled = false;
-                            // Automatically run search when aisle is selected
+                             
                             document.getElementById('aisle').addEventListener('change', function() {
                                 var selectedBuilding = document.getElementById('building').value;
                                 var selectedAisle = this.value;
@@ -137,7 +137,7 @@
                 xhr.send();
             }
 
-            // Function to perform search based on selected building and aisle
+             
             function search(building, aisle, searchTerm) {
                 var xhr = new XMLHttpRequest();
                 xhr.onreadystatechange = function () {
@@ -153,7 +153,7 @@
                 xhr.send();
             }
 
-            // Populate aisles when building is selected
+             
             document.getElementById('building').addEventListener('change', function () {
                 var selectedBuilding = this.value;
                 if (selectedBuilding) {
@@ -162,11 +162,11 @@
                     document.getElementById('aisle').innerHTML = '<option value="">Select Aisle</option>';
                     document.getElementById('aisle').disabled = true;
                 }
-                // Automatically run search when building is selected
+                 
                 search(selectedBuilding, '', '');
             });
 
-            // Search as you type in the search bar
+             
             document.getElementById('itemSearch').addEventListener('input', function () {
                 var selectedBuilding = document.getElementById('building').value;
                 var selectedAisle = document.getElementById('aisle').value;

@@ -1,12 +1,12 @@
 <?php
-// Include database connection
+ 
 include('db.php');
 
-// Get selected building from request and validate it
+ 
 $selectedBuilding = isset($_GET['building']) ? $_GET['building'] : '';
 
 if (!empty($selectedBuilding)) {
-    // Fetch distinct aisle names for the selected building
+     
     $query = "SELECT DISTINCT Aisles.AisleName FROM Aisles 
               JOIN Buildings ON Aisles.BuildingID = Buildings.BuildingID 
               WHERE Buildings.BuildingName = ?";
@@ -18,7 +18,7 @@ if (!empty($selectedBuilding)) {
         $result = mysqli_stmt_get_result($stmt);
 
         if ($result) {
-            // Populate aisle dropdown options
+             
             echo "<option value=''>Select Aisle</option>";
             if (mysqli_num_rows($result) > 0) {
                 while ($row = mysqli_fetch_assoc($result)) {
@@ -26,17 +26,17 @@ if (!empty($selectedBuilding)) {
                 }
             }
         } else {
-            // Handle query failure
+             
             echo "<option value=''>Error loading aisles</option>";
         }
 
         mysqli_stmt_close($stmt);
     } else {
-        // Handle statement preparation failure
+         
         echo "<option value=''>Error preparing query</option>";
     }
 } else {
-    // Handle missing or invalid building name
+     
     echo "<option value=''>Invalid building selection</option>";
 }
 
