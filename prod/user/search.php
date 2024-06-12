@@ -1,20 +1,20 @@
 <?php
- 
+
 include('db.php');
 
- 
 $selectedBuilding = $_GET['building'];
 $selectedAisle = $_GET['aisle'];
 $searchTerm = $_GET['search'];
 
- 
-$query = "SELECT Items.ItemID, Items.ItemName, Items.Description, Items.Quantity, Shelves.ShelfName, Aisles.AisleName, Buildings.BuildingName
+$query = "SELECT Items.ItemID, Items.ItemName, Items.Description, Items.Quantity, Shelves.ShelfName, Aisles.AisleName, Buildings.BuildingName, MeasurementTypes.MeasurementType
           FROM Items 
           INNER JOIN Shelves ON Items.ShelfID = Shelves.ShelfID 
           INNER JOIN Aisles ON Shelves.AisleID = Aisles.AisleID 
-          INNER JOIN Buildings ON Aisles.BuildingID = Buildings.BuildingID 
+          INNER JOIN Buildings ON Aisles.BuildingID = Buildings.BuildingID
+          INNER JOIN MeasurementTypes ON Items.MeasurementTypeID = MeasurementTypes.MeasurementTypeID 
           WHERE 1=1";
 
+$params = [];
 if (!empty($selectedBuilding)) {
     $query .= " AND Buildings.BuildingName = ?";
     $params[] = $selectedBuilding;
@@ -30,7 +30,6 @@ if (!empty($searchTerm)) {
     $params[] = '%' . $searchTerm . '%';
 }
 
- 
 $stmt = mysqli_prepare($connection, $query);
 if ($stmt) {
     if (!empty($params)) {
@@ -40,14 +39,13 @@ if ($stmt) {
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
 
-     
     if (mysqli_num_rows($result) > 0) {
         while ($row = mysqli_fetch_assoc($result)) {
             echo "<div class='search-item'>";
             echo "<div>";
             echo "<strong>Item Name:</strong> " . $row['ItemName'] . "<br>";
             echo "<strong>Description:</strong> " . $row['Description'] . "<br>";
-            echo "<strong>Quantity:</strong> " . $row['Quantity'] . "<br>";
+            echo "<strong>Quantity:</strong> " . $row['Quantity'] . " " . $row['MeasurementType'] . "<br>";
             echo "<strong>Shelf:</strong> " . $row['ShelfName'] . "<br>";
             echo "<strong>Aisle:</strong> " . $row['AisleName'] . "<br>";
             echo "<strong>Building:</strong> " . $row['BuildingName'] . "<br>";
@@ -64,6 +62,5 @@ if ($stmt) {
     echo "Error preparing statement: " . mysqli_error($connection);
 }
 
- 
 mysqli_close($connection);
 ?>
